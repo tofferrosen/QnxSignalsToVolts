@@ -11,6 +11,9 @@
 #include <stdint.h>						/* Resource for uintptr_t */
 #include <sys/mman.h>					/* Resource for mmap_device_io */
 #include <hw/inout.h>					/* Resource for in and out fns */
+#include <sys/neutrino.h>       	 	/* Resource(s): ThreadCtl() */
+#include <cstdlib>
+#include <iostream>
 
 #ifndef MEASURER_H_
 #define MEASURER_H_
@@ -26,6 +29,13 @@
 #define INPUT_RANGE_REGISTER ( BASE_ADDR + 3)	/* Input range register */
 #define VOLTAGE_RANGE (0x01)					/* Range of input voltage +-5V (gain of 2) */
 #define WAIT_BIT (0b00100000)					/* The WAIT bit for analog input circuit */
+
+/* Port Direction Register */
+#define PORT_DIR_OFFSET (11)
+#define PORT_DIR_ADDR (BASE_ADDR + PORT_DIR_OFFSET)
+
+/* Set ports for input */
+#define DIOIN_PORT (0b1111111)
 
 /* Constant used for the mman library */
 #define BYTE (1)

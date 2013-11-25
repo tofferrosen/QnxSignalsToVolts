@@ -33,12 +33,9 @@ void Measurer::convert() {
 	while (( in8( inputPtr ) & WAIT_BIT)!= 0 ){
 
 	}
-
 	// Perform the A/D conversion
 	out8( lsbPtr, 0x80);
-
 	while( in8( inputPtr ) & 0x80); // wait for conversion to finish
-
 }
 
 /**
@@ -47,23 +44,38 @@ void Measurer::convert() {
  */
 int Measurer::readPortA(){
 	int value;
-	in8(value, porta);
+	value = in8(porta);
 	return value;
 }
 /**
  * Set up the A/D pointers and the A/D input range
  */
 void Measurer::initalize(){
-	lsbPtr = mmap_device_io( BYTE, BASE_ADDR + LSB_OFFSET );
-	msbPtr = mmap_device_io( BYTE, BASE_ADDR + MSB_OFFSET );
-	adChannelPtr = mmap_device_io ( BYTE, BASE_ADDR + AD_REGISTER_OFFSET);
-	porta = mmap_device_io(BYTE, PORTA_ADDR);
+	uintptr_t port_dir;
+	int privity_err;
+	int return_code = EXIT_SUCCESS;
 
-	/* Set the board to use channel 4 only */
-	out8( adChannelPtr, AD_CHANEL);
+	/* Enable GPIO access to the current thread: */
+	privity_err = ThreadCtl(_NTO_TCTL_IO, NULL );
+	if (privity_err == -1) {
+		std::cout << "Error: Unable to acquire root permission for GPIO.\n";
+		return_code = EXIT_FAILURE;
+	} else {
+		lsbPtr = mmap_device_io( BYTE, BASE_ADDR + LSB_OFFSET );
+		msbPtr = mmap_device_io( BYTE, BASE_ADDR + MSB_OFFSET );
+		adChannelPtr = mmap_device_io ( BYTE, BASE_ADDR + AD_REGISTER_OFFSET);
+		porta = mmap_device_io(BYTE, PORTA_ADDR);
+		port_dir = mmap_device_io(BYTE, PORT_DIR_ADDR);
 
-	inputPtr = mmap_device_io ( 0x01, INPUT_RANGE_REGISTER);
-	out8( inputPtr, VOLTAGE_RANGE );
+		/* Initalize ports for input (specifically for porta!) */
+		out8(port_dir, DIOIN_PORT);
+
+		/* Set the board to use channel 4 only */
+		out8( adChannelPtr, AD_CHANEL);
+
+		inputPtr = mmap_device_io ( BYTE, INPUT_RANGE_REGISTER);
+		out8( inputPtr, VOLTAGE_RANGE );
+	}
 }
 
 Measurer::~Measurer() {

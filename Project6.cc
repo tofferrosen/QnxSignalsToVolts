@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	measurer->initalize();
 
 	while(true){
-		cout << "Reading: " << measurer->readPortA() << "\n";
+		std::cout << "Reading: " << measurer->readPortA() << "\n";
 	}
 	//measurer->convert();
 	//int data = measurer->getData();
