@@ -40,13 +40,24 @@ void Measurer::convert() {
 	while( in8( inputPtr ) & 0x80); // wait for conversion to finish
 
 }
+
+/**
+ * Reads data from the digital I/O board port A and writes it
+ * to the channel register.
+ */
+int Measurer::readPortA(){
+	int value;
+	in8(value, porta);
+	return value;
+}
 /**
  * Set up the A/D pointers and the A/D input range
  */
 void Measurer::initalize(){
-	lsbPtr = mmap_device_io( 0x01, BASE_ADDR + LSB_OFFSET );
-	msbPtr = mmap_device_io( 0x01, BASE_ADDR + MSB_OFFSET );
-	adChannelPtr = mmap_device_io ( 0x01, BASE_ADDR + AD_REGISTER_OFFSET);
+	lsbPtr = mmap_device_io( BYTE, BASE_ADDR + LSB_OFFSET );
+	msbPtr = mmap_device_io( BYTE, BASE_ADDR + MSB_OFFSET );
+	adChannelPtr = mmap_device_io ( BYTE, BASE_ADDR + AD_REGISTER_OFFSET);
+	porta = mmap_device_io(BYTE, PORTA_ADDR);
 
 	/* Set the board to use channel 4 only */
 	out8( adChannelPtr, AD_CHANEL);

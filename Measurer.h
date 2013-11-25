@@ -18,13 +18,17 @@
 #define BASE_ADDR ( 0x280 )						/* Base address to A/D converter */
 #define LSB_OFFSET ( 0 )						/* The least significant byte of data */
 #define MSB_OFFSET ( 1 )						/* The most significant byte of data */
+#define PORTA_OFFSET (8)						/* PORT A */
+#define PORTA_ADDR (BASE_ADDR + PORTA_OFFSET)	/* PORT A ADDR */
 #define AD_REGISTER_OFFSET ( 2 )				/* AD CHANEL OFFSET */
 #define AD_GAIN_SCAN_OFFSET ( 3 )				/* Analog input status offset */
 #define AD_CHANEL ( 0x44 ) 						/* AD Chanel */
 #define INPUT_RANGE_REGISTER ( BASE_ADDR + 3)	/* Input range register */
 #define VOLTAGE_RANGE (0x01)					/* Range of input voltage +-5V (gain of 2) */
 #define WAIT_BIT (0b00100000)					/* The WAIT bit for analog input circuit */
-#define STRTAD ( 128 )
+
+/* Constant used for the mman library */
+#define BYTE (1)
 
 typedef unsigned char uint8_t;
 
@@ -35,6 +39,7 @@ public:
 
 
 	void initalize();
+	int readPortA();
 	int getData();
 	void convert();
 
@@ -45,6 +50,7 @@ private:
 	uintptr_t msbPtr;
 	uintptr_t adChannelPtr;
 	uintptr_t inputPtr;
+	uintptr_t porta;
 };
 
 #endif /* MEASURER_H_ */
