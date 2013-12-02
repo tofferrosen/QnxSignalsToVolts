@@ -17,7 +17,13 @@ int main(int argc, char *argv[]) {
 	measurer->initalize();
 
 	while(true){
-		std::cout << "Reading: " << measurer->readPortA() << "\n";
+		// read value from port a
+		int portaVal = measurer->readPortA();
+		measurer->writeRegister(portaVal);
+
+
+		// write to register
+
 	}
 	//measurer->convert();
 	//int data = measurer->getData();

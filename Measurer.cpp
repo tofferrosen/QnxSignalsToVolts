@@ -39,13 +39,23 @@ void Measurer::convert() {
 }
 
 /**
- * Reads data from the digital I/O board port A and writes it
- * to the channel register.
+ * Reads data from the digital I/O board port A
  */
 int Measurer::readPortA(){
-	int value;
-	value = in8(porta);
-	return value;
+	return in8(porta);
+}
+
+/**
+ * Writes data to the channel register
+ */
+void Measurer::writeRegister(int data){
+	std::cout << "writing data: " << data << "\n";
+	out8(adChannelPtr, data);
+
+	std::cout << "starting conversion" << "\n";
+	convert();
+
+	std::cout << "voltage: " << getData() << "\n";
 }
 /**
  * Set up the A/D pointers and the A/D input range

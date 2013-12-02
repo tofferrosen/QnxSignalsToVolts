@@ -52,6 +52,7 @@ public:
 	int readPortA();
 	int getData();
 	void convert();
+	void writeRegister(int);
 
 	virtual ~Measurer();
 
