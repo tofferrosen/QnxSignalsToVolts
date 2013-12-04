@@ -1,8 +1,9 @@
 /*
- * Measurer.cpp
+ * Converter
+ * Represents the A/D Converter.
  *
- *  Created on: Nov 20, 2013
- *      Author: cbr4830
+ * @author Christoffer Rosen
+ * @author Lennard Streat
  */
 
 #include "Converter.h"
@@ -12,8 +13,10 @@ Converter::Converter() {
 }
 
 /**
- * Read the data from the board after the
- * A/D conversion
+ * getData()
+ * @descr 		Read the data from the board after the
+ * 		  		A/D conversion
+ * @return 		A/D code between -32768 to 32767 from board
  * @private
  */
 int Converter::getData(){
@@ -23,8 +26,8 @@ int Converter::getData(){
 }
 
 /**
- * Perorms an A/D conversion
- * TODO: Have a timeout in case hardware fault causes bit 1 to be stuck
+ * convert()
+ * @descr		Performs the A/D conversion
  */
 void Converter::convert() {
 
@@ -34,8 +37,10 @@ void Converter::convert() {
 }
 
 /**
- * Returns the input voltage
- * input voltage = A/D value  * full-scale input range / 32768
+ * getVoltage()
+ * @descr 			returns the input voltage.
+ * 					Formula = input voltage = A/D value  * full-scale input range / 32768
+ * @return float	The voltage from the A/D value from the board
  */
 float Converter::getVoltage(){
 	int data = getData();
@@ -44,10 +49,10 @@ float Converter::getVoltage(){
 }
 
 /**
- * function: initalize()
- * description: Set up the A/D pointers and the A/D input range
- * 	IMPORTANT: Assumes and requires that GPIO has access to the current
- * 	thread
+ * initalize()
+ * @descr			Set up the A/D pointers and the A/D input range
+ * 					IMPORTANT: Assumes and requires that GPIO has access to
+ * 					the current thread
  */
 void Converter::initalize(){
 	_lsbPtr = mmap_device_io( BYTE, BASE_ADDR + LSB_OFFSET );
@@ -61,6 +66,7 @@ void Converter::initalize(){
 	out8( _inputPtr, VOLTAGE_RANGE );
 }
 
+// destructor
 Converter::~Converter() {
 	// TODO Auto-generated destructor stub
 }

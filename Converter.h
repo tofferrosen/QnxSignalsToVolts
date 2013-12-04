@@ -1,6 +1,9 @@
-/**
- * Comments TBD
+/*
+ * Converter
+ * Represents the A/D Converter.
  *
+ * @author Christoffer Rosen
+ * @author Lennard Streat
  */
 
 #include <stdint.h>						/* Resource for uintptr_t */
@@ -23,28 +26,48 @@
 #define VOLTAGE_RANGE (0x01)					/* Range of input voltage +-5V (gain of 2) */
 #define WAIT_BIT (0b00100000)					/* The WAIT bit for analog input circuit */
 #define FULL_SCALE_INPUT_RANGE (5)
+
 /* Constant used for the mman library */
 #define BYTE (1)
 
-typedef unsigned char uint8_t;
-
-
 class Converter {
 public:
+
+	// constructor
 	Converter();
 
+	/**
+	 * Set up the A/D pointers and the A/D input range
+	 * IMPORTANT: Assumes and requires that GPIO has access to
+	 * the current thread
+	 */
 	void initalize();
+	/**
+	 *	Performs the A/D conversion
+	 */
 	void convert();
+	/**
+	 * Returns the input voltage.
+	 * Formula: input voltage = A/D value  * full-scale input range / 32768
+	 * @return float		The voltage from the A/D value from the board
+	 */
 	float getVoltage();
 
+	// deconstructor
 	virtual ~Converter();
 
 private:
+	/**
+	 * The data from the board after the A/D conversion
+	 * @return 			The A/D code between -32768 to 32767 from board
+	 * @private
+	 */
 	int getData();
-	uintptr_t _lsbPtr;
-	uintptr_t _msbPtr;
-	uintptr_t _adChannelPtr;
-	uintptr_t _inputPtr;
+
+	uintptr_t _lsbPtr;	/* Memory mapped I/O to the A/D least significant byte of data */
+	uintptr_t _msbPtr;	/* Memory mapped I/O to the A/D most significant byte of data */
+	uintptr_t _adChannelPtr; /* Memory mapped I/O to the A/D channel */
+	uintptr_t _inputPtr; /* Memory mapped I/O to the input */
 };
 
 #endif /* Converter_H_ */
