@@ -66,6 +66,25 @@ void Converter::initalize(){
 	out8( _inputPtr, VOLTAGE_RANGE );
 }
 
+/**
+ * getByteRepresentation()
+ * @descr 		Returns byte representation of a float voltage value to be used
+ * 				by the freescale implementation.
+ * @param 		A float voltage value ranging between -5 to 5.
+ * @return		Returns a signed character byte representation of the voltage value
+ */
+signed char Converter::getByteRepresentation(float voltage){
+	signed char byteRep;
+
+	// scale voltage value
+	if( voltage > 0 ){
+		byteRep = ( (float)( (float)SIGNED_POSITIVE_MAX/(float)FULL_SCALE_INPUT_RANGE ) * voltage );
+	} else {
+		byteRep = ( (float)( (float)SIGNED_MINUS_MAX/(float)FULL_SCALE_INPUT_RANGE ) * voltage );
+	}
+	return byteRep;
+}
+
 // destructor
 Converter::~Converter() {
 	// TODO Auto-generated destructor stub

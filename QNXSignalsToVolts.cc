@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
 	/* Error Handling */
 	int privity_err;
 	int return_code = EXIT_SUCCESS;
+	float voltage;
+	signed char byteRep;
 
 	/* Enable GPIO access to the current thread: */
 	privity_err = ThreadCtl(_NTO_TCTL_IO, NULL );
@@ -34,7 +36,10 @@ int main(int argc, char *argv[]) {
 		/* Start program */
 		while(true){
 			converter->convert();
-			std::cout << "Reading.. " << converter->getVoltage() << "\n";
+			voltage = converter->getVoltage();
+			std::cout << "Voltage: " << voltage << "\n";
+			byteRep = converter->getByteRepresentation(voltage);
+			std::cout << "Byte Rep: " << (int)byteRep << "\n";
 		}
 		return EXIT_SUCCESS;
 	}

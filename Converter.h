@@ -27,6 +27,10 @@
 #define WAIT_BIT (0b00100000)					/* The WAIT bit for analog input circuit */
 #define FULL_SCALE_INPUT_RANGE (5)
 
+/* For converting voltage float to byte value */
+#define SIGNED_MINUS_MAX (128)
+#define SIGNED_POSITIVE_MAX (127)
+
 /* Constant used for the mman library */
 #define BYTE (1)
 
@@ -52,6 +56,14 @@ public:
 	 * @return float		The voltage from the A/D value from the board
 	 */
 	float getVoltage();
+
+	/**
+	 * Returns byte representation of a float voltage value to be used
+	 * by the freescale implementation.
+	 * @param 		A float voltage value ranging between -5 to 5.
+	 * @return		Returns a signed character byte representation of the voltage value
+	 */
+	signed char getByteRepresentation(float);
 
 	// deconstructor
 	virtual ~Converter();
