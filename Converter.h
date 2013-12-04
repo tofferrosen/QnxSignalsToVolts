@@ -22,7 +22,7 @@
 #define INPUT_RANGE_REGISTER ( BASE_ADDR + 3)	/* Input range register */
 #define VOLTAGE_RANGE (0x01)					/* Range of input voltage +-5V (gain of 2) */
 #define WAIT_BIT (0b00100000)					/* The WAIT bit for analog input circuit */
-#define FULL_SCALE_INPUT_RANGE (10)
+#define FULL_SCALE_INPUT_RANGE (5)
 /* Constant used for the mman library */
 #define BYTE (1)
 

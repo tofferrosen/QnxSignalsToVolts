@@ -39,8 +39,7 @@ void Converter::convert() {
  */
 float Converter::getVoltage(){
 	int data = getData();
-	std::cout << "Data: " + data << "\n";
-	int voltage = ((float)(data) * (float)(FULL_SCALE_INPUT_RANGE) ) / (float)32768;
+	float voltage = ((float)(data) * (float)(FULL_SCALE_INPUT_RANGE) ) / (float)32768;
 	return voltage;
 }
 
