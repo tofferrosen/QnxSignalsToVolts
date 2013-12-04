@@ -1,6 +1,6 @@
 /*
- * Converter
- * Represents the A/D Converter.
+ * Converter class
+ * Represents the A/D Converter
  *
  * @author Christoffer Rosen
  * @author Lennard Streat
