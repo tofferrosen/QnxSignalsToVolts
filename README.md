@@ -1,7 +1,7 @@
 QnxSignalsToVolts
 =================
 
-The fabulous QNX implementation for providing rough indication of voltage from a signal generator
+The fabulous QNX implementation for providing rough indication of voltage from a signal generator.
 This is a project for an Embedded Real Time Systems course @ RIT.
 
 Implements an embedded, real-time stand-alone system to provide a rough 
