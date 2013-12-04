@@ -1,10 +1,10 @@
 /*
- * Project 6
+ * QNXSignalsToVolts.cc
+ * Embedded and Real Time Systems: Project 6
+ *
  * Implements a stand-alone system to provide a rough inidcation
  * of voltage from a waveform created by a signal generator using
- * servo motors
- *
- * QNX implementation
+ * servo motors. QNX implementation
  *
  * @author Christoffer Rosen
  * @author Lennard Streat
