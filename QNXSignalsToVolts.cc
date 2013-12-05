@@ -14,13 +14,27 @@
 #include <iostream>
 #include <Converter.h>
 
+/* Port Direction Register */
+#define PORT_DIR_OFFSET (11)
+#define PORT_DIR_ADDR (BASE_ADDR + PORT_DIR_OFFSET)
+
+/* Set port for output */
+#define DIO_OUT_PORT (0b00000000) // all output
+
+/* Define PORTA address */
+#define PORTA_OFFSET (8)
+#define PORTA_ADDR (BASE_ADDR + PORTA_OFFSET)
+
 int main(int argc, char *argv[]) {
+
+	float voltage;
+	signed char byteRep;
+	uintptr_t porta;
+	uintptr_t port_dir;
 
 	/* Error Handling */
 	int privity_err;
 	int return_code = EXIT_SUCCESS;
-	float voltage;
-	signed char byteRep;
 
 	/* Enable GPIO access to the current thread: */
 	privity_err = ThreadCtl(_NTO_TCTL_IO, NULL );
@@ -29,7 +43,20 @@ int main(int argc, char *argv[]) {
 		return_code = EXIT_FAILURE;
 	} else {
 
-		/* Initalize the converter */
+		porta =  mmap_device_io( BYTE, PORTA_ADDR );
+		port_dir = mmap_device_io( BYTE, PORT_DIR_ADDR );
+
+		// sets the direction of port to output.
+		out8( port_dir, DIO_OUT_PORT);
+		std::cout << "PORT DIR = " << (int)in8(port_dir) << std::endl;
+		out8( porta, 0xF0 );
+		std::cout << "PORT DIR = " << (int)in8(porta) << std::endl;
+		out8( porta, 0x0F );
+		std::cout << "PORT DIR = " << (int)in8(porta) << std::endl;
+		//return 0;
+
+
+		/* Initialize the converter */
 		Converter * converter = new Converter();
 		converter->initalize();
 
@@ -37,9 +64,10 @@ int main(int argc, char *argv[]) {
 		while(true){
 			converter->convert();
 			voltage = converter->getVoltage();
-			std::cout << "Voltage: " << voltage << "\n";
+			//std::cout << "Voltage: " << voltage << "\n";
 			byteRep = converter->getByteRepresentation(voltage);
-			std::cout << "Byte Rep: " << (int)byteRep << "\n";
+			//std::cout << "Byte Rep: " << byteRep << "\n";
+			out8( porta, byteRep);
 		}
 		return EXIT_SUCCESS;
 	}
