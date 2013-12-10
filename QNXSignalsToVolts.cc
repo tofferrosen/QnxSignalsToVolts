@@ -64,9 +64,8 @@ int main(int argc, char *argv[]) {
 		while(true){
 			converter->convert();
 			voltage = converter->getVoltage();
-			//std::cout << "Voltage: " << voltage << "\n";
 			byteRep = converter->getByteRepresentation(voltage);
-			//std::cout << "Byte Rep: " << byteRep << "\n";
+			// write the voltage as byte to port A on the digital I/O
 			out8( porta, byteRep);
 		}
 		return EXIT_SUCCESS;
