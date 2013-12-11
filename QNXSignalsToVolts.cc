@@ -55,7 +55,6 @@ int main(int argc, char *argv[]) {
 		std::cout << "Error: Unable to acquire root permission for GPIO.\n";
 		return_code = EXIT_FAILURE;
 	} else {
-
 		porta =  mmap_device_io( BYTE, PORTA_ADDR );
 		portb = mmap_device_io( BYTE, PORTB_ADDR );
 		port_dir = mmap_device_io( BYTE, PORT_DIR_ADDR );
@@ -63,7 +62,6 @@ int main(int argc, char *argv[]) {
 		// sets the direction of ports to output.
 		out8( port_dir, DIO_OUT_PORT);
 
-		
 		/* Initialize the converter */
 		Converter * converter = new Converter();
 		converter->initalize();
@@ -79,7 +77,6 @@ int main(int argc, char *argv[]) {
 				out8( porta, byteRep);
 				out8( portb, 0x0); // clear led error flag
 			} else {
-				std::cout << "Voltage not within an acceptable value \n";
 				out8( portb, 0xFF);  // signal error w/ led 
 			}
 		}
