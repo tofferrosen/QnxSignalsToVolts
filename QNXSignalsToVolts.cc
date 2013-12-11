@@ -48,13 +48,6 @@ int main(int argc, char *argv[]) {
 
 		// sets the direction of port to output.
 		out8( port_dir, DIO_OUT_PORT);
-		std::cout << "PORT DIR = " << (int)in8(port_dir) << std::endl;
-		out8( porta, 0xF0 );
-		std::cout << "PORT DIR = " << (int)in8(porta) << std::endl;
-		out8( porta, 0x0F );
-		std::cout << "PORT DIR = " << (int)in8(porta) << std::endl;
-		//return 0;
-
 
 		/* Initialize the converter */
 		Converter * converter = new Converter();
@@ -64,9 +57,9 @@ int main(int argc, char *argv[]) {
 		while(true){
 			converter->convert();
 			voltage = converter->getVoltage();
-			//std::cout << "Voltage: " << voltage << "\n";
+			std::cout << "Voltage: " << voltage << "\n";
 			byteRep = converter->getByteRepresentation(voltage);
-			//std::cout << "Byte Rep: " << byteRep << "\n";
+			std::cout << "Byte Rep: " << byteRep << "\n";
 			out8( porta, byteRep);
 		}
 		return EXIT_SUCCESS;
