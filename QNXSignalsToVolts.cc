@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
 		// sets the direction of ports to output.
 		out8( port_dir, DIO_OUT_PORT);
 		
-
 		/* Initialize the converter */
 		Converter * converter = new Converter();
 		converter->initalize();
