@@ -5,7 +5,10 @@
  * Implements a stand-alone system to provide a rough inidcation
  * of voltage from a waveform created by a signal generator using
  * servo motors. QNX implementation
- *
+ * 
+ * Uses PORTA to output voltage (byte)
+ * Uses PORTB to output error conditions. 
+ * 
  * @author Christoffer Rosen
  * @author Lennard Streat
  */
@@ -21,9 +24,16 @@
 /* Set port for output */
 #define DIO_OUT_PORT (0b00000000) // all output
 
-/* Define PORTA address */
+/* Define PORTA address for output */
 #define PORTA_OFFSET (8)
 #define PORTA_ADDR (BASE_ADDR + PORTA_OFFSET)
+
+/* Define PORTB address for error conditions */
+#define PORTB_OFFSET (9)
+#define PORTB_ADDR (BASE_ADDR + PORTB_OFFSET)
+
+#define MIN_VOLTAGE_ALLOWED (-5)
+#define MAX_VOLTAGE_ALLOWED (5)
 
 int main(int argc, char *argv[]) {
 
@@ -44,17 +54,12 @@ int main(int argc, char *argv[]) {
 	} else {
 
 		porta =  mmap_device_io( BYTE, PORTA_ADDR );
+		portb = mmap_device_io( BYTE, PORTB_ADDR );
 		port_dir = mmap_device_io( BYTE, PORT_DIR_ADDR );
 
-		// sets the direction of port to output.
+		// sets the direction of ports to output.
 		out8( port_dir, DIO_OUT_PORT);
-		std::cout << "PORT DIR = " << (int)in8(port_dir) << std::endl;
-		out8( porta, 0xF0 );
-		std::cout << "PORT DIR = " << (int)in8(porta) << std::endl;
-		out8( porta, 0x0F );
-		std::cout << "PORT DIR = " << (int)in8(porta) << std::endl;
-		//return 0;
-
+		
 
 		/* Initialize the converter */
 		Converter * converter = new Converter();
@@ -64,9 +69,16 @@ int main(int argc, char *argv[]) {
 		while(true){
 			converter->convert();
 			voltage = converter->getVoltage();
-			byteRep = converter->getByteRepresentation(voltage);
-			// write the voltage as byte to port A on the digital I/O
-			out8( porta, byteRep);
+			
+			// write the voltage as byte to port A on the digital I/O if the voltage is acceptable 
+			if( voltage > MIN_VOLTAGE_ALLOWED && voltage < MAX_VOLTAGE_ALLOWED ){
+				byteRep = converter->getByteRepresentation(voltage);
+				out8( porta, byteRep);
+				out8( portb, 0x0); // clear led error flag
+			} else {
+				std::cout << "Voltage not within an acceptable value \n";
+				out8( portb, 0xFF);  // signal error w/ led 
+			}
 		}
 		return EXIT_SUCCESS;
 	}
